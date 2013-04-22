@@ -226,7 +226,7 @@ class TestTransfluent(object):
         )
         assert client.is_file_complete('my-project/messages', 11) is False
 
-    def test_file_status_with_file_object(self):
+    def test_file_save_with_file_object(self):
         client = make_transfluent()
         fake_rv = flexmock()
         (
@@ -255,7 +255,7 @@ class TestTransfluent(object):
         )
         assert rv is fake_rv
 
-    def test_file_status_with_file_contents_as_string(self):
+    def test_file_save_with_file_contents_as_string(self):
         client = make_transfluent()
         fake_rv = flexmock()
         (
