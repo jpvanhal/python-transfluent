@@ -1,6 +1,16 @@
+# -*- coding: utf-8 -*-
+"""
+    transfluent
+    ~~~~~~~~~~~
+
+    :copyright: (c) 2013 by Janne Vanhala.
+    :license: BSD, see LICENSE for more details.
+"""
 import base64
 
 import requests
+
+__version__ = '0.1.0-dev'
 
 TRANSFLUENT_URL = 'https://transfluent.com/v2/'
 
