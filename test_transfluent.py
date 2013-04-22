@@ -284,6 +284,30 @@ class TestTransfluent(object):
         )
         assert rv is fake_rv
 
+    def file_translate(self):
+        client = make_transfluent()
+        fake_rv = flexmock()
+        (
+            flexmock(client)
+            .should_receive('_authed_request')
+            .with_args(
+                'POST',
+                'file/translate',
+                {
+                    'identifier': 'my-project/messages',
+                    'language': 1,
+                    'target_languages[]': [11, 14],
+                    'comment': '',
+                    'callback_url': '',
+                    'level': 3
+                }
+            )
+            .and_return(fake_rv)
+            .once()
+        )
+        rv = client.file_translate('my-project/messages', 1, [11, 14])
+        assert rv is fake_rv
+
 
 class TestTransfluentError(object):
     def test_constructor_sets_response(self):

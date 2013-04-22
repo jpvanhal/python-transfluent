@@ -82,6 +82,17 @@ class Transfluent(object):
         status = self.file_status(identifier, language)
         return status['progress'] == '100%'
 
+    def file_translate(self, identifier, language, target_languages, **kwargs):
+        data = {
+            'identifier': identifier,
+            'language': language,
+            'target_languages[]': target_languages,
+            'level': kwargs.get('level', 3),
+            'comment': kwargs.get('comment', ''),
+            'callback_url': kwargs.get('callback_url', '')
+        }
+        return self._authed_request('POST', 'file/translate', data)
+
 
 class TransfluentError(Exception):
     def __init__(self, response):
