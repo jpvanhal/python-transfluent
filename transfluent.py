@@ -78,6 +78,10 @@ class Transfluent(object):
         }
         return self._authed_request('GET', 'file/status', data)
 
+    def is_file_complete(self, identifier, language):
+        status = self.file_status(identifier, language)
+        return status['progress'] == '100%'
+
 
 class TransfluentError(Exception):
     def __init__(self, response):

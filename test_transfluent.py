@@ -204,6 +204,28 @@ class TestTransfluent(object):
         rv = client.file_status('my-project/messages', 11)
         assert rv is fake_rv
 
+    def test_is_file_complete_when_file_has_been_translated(self):
+        client = make_transfluent()
+        (
+            flexmock(client)
+            .should_receive('file_status')
+            .with_args('my-project/messages', 11)
+            .and_return({'progress': '100%'})
+            .once()
+        )
+        assert client.is_file_complete('my-project/messages', 11) is True
+
+    def test_is_file_complete_when_file_has_not_been_translated(self):
+        client = make_transfluent()
+        (
+            flexmock(client)
+            .should_receive('file_status')
+            .with_args('my-project/messages', 11)
+            .and_return({'progress': '37.55%'})
+            .once()
+        )
+        assert client.is_file_complete('my-project/messages', 11) is False
+
     def test_file_status_with_file_object(self):
         client = make_transfluent()
         fake_rv = flexmock()
