@@ -17,7 +17,7 @@ Installation
 Usage
 -----
 
-::
+.. code-block:: python
 
     import transfluent
 
