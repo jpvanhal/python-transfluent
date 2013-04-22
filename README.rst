@@ -7,6 +7,8 @@ Transfluent API Client for Python
    :alt: Build Status
 .. _build status: http://travis-ci.org/jpvanhal/python-transfluent
 
+This is a Python wrapper for the `Transfluent API <http://transfluent.com/backend-api/>`_.
+
 Installation
 ------------
 
