@@ -28,6 +28,9 @@ setup(
     py_modules=['transfluent'],
     license=open('LICENSE').read(),
     platforms='any',
+    install_requires=[
+        'requests',
+    ],
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
