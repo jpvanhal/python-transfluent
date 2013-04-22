@@ -22,8 +22,12 @@ class Transfluent(object):
         response = requests.request(method, url, **kwargs)
         if response.status_code != 200:
             raise TransfluentError(response)
-        data = response.json()
-        return data['response']
+        try:
+            data = response.json()
+        except ValueError:
+            return response.content
+        else:
+            return data['response']
 
     def _authed_request(self, method, path, data=None):
         data = data or {}
@@ -92,6 +96,13 @@ class Transfluent(object):
             'callback_url': kwargs.get('callback_url', '')
         }
         return self._authed_request('POST', 'file/translate', data)
+
+    def file_read(self, identifier, language):
+        data = {
+            'identifier': identifier,
+            'language': language,
+        }
+        return self._authed_request('GET', 'file/read', data)
 
 
 class TransfluentError(Exception):

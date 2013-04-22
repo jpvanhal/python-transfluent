@@ -41,7 +41,7 @@ class TestTransfluent(object):
         client = make_transfluent()
         assert client._transfluent_url == 'https://transfluent.com/v2/'
 
-    def test_request_on_successful_response(self):
+    def test_request_on_successful_json_response(self):
         response = requests.Response()
         response.status_code = 200
         response.raw = BytesIO('{"status":"OK","response":"Hello World"}')
@@ -59,6 +59,25 @@ class TestTransfluent(object):
         client = make_transfluent()
         response = client._request('GET', 'hello/World/')
         assert response == u'Hello World'
+
+    def test_request_on_successful_non_json_response(self):
+        response = requests.Response()
+        response.status_code = 200
+        response.raw = BytesIO('some content')
+        (
+            flexmock(requests)
+            .should_receive('request')
+            .with_args(
+                'GET',
+                'https://transfluent.com/v2/hello/World/',
+                params=None
+            )
+            .and_return(response)
+            .once()
+        )
+        client = make_transfluent()
+        response = client._request('GET', 'hello/World/')
+        assert response == u'some content'
 
     def test_request_on_error_raises_exception(self):
         from transfluent import TransfluentError
@@ -306,6 +325,26 @@ class TestTransfluent(object):
             .once()
         )
         rv = client.file_translate('my-project/messages', 1, [11, 14])
+        assert rv is fake_rv
+
+    def test_file_read(self):
+        client = make_transfluent()
+        fake_rv = flexmock()
+        (
+            flexmock(client)
+            .should_receive('_authed_request')
+            .with_args(
+                'GET',
+                'file/read',
+                {
+                    'identifier': 'my-project/messages',
+                    'language': 11,
+                }
+            )
+            .and_return(fake_rv)
+            .once()
+        )
+        rv = client.file_read('my-project/messages', 11)
         assert rv is fake_rv
 
 
