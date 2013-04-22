@@ -237,7 +237,7 @@ class TestTransfluent(object):
                 'file/save',
                 {
                     'identifier': 'my-project/messages',
-                    'language': 11,
+                    'language': 1,
                     'format': 'UTF-8',
                     'content': 'ZmlsZSBjb250ZW50cw==',
                     'type': 'po-file',
@@ -249,7 +249,7 @@ class TestTransfluent(object):
         )
         rv = client.file_save(
             'my-project/messages',
-            11,
+            1,
             StringIO(u"file contents"),
             'po-file'
         )
@@ -266,7 +266,7 @@ class TestTransfluent(object):
                 'file/save',
                 {
                     'identifier': 'my-project/messages',
-                    'language': 11,
+                    'language': 1,
                     'format': 'UTF-8',
                     'content': 'ZmlsZSBjb250ZW50cw==',
                     'type': 'po-file',
@@ -278,7 +278,7 @@ class TestTransfluent(object):
         )
         rv = client.file_save(
             'my-project/messages',
-            11,
+            1,
             "file contents",
             'po-file'
         )
