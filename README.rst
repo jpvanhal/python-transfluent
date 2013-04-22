@@ -53,7 +53,12 @@ Usage
 
     if is_translated:
         # Retrieve the translated resource file.
-        client.file_read(identifier='my-project/messages', language=11)
+        content = client.file_read(
+            identifier='my-project/messages',
+            language=11
+        )
+        with open('translations/en/LC_MESSAGES/messages.po', 'w') as out:
+            out.write(content)
     else:
         # Check the precise translation progress for the resource file.
         status = client.file_status(
