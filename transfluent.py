@@ -10,7 +10,7 @@ import base64
 
 import requests
 
-__version__ = '0.1.0-dev'
+__version__ = '0.1.0'
 
 TRANSFLUENT_URL = 'https://transfluent.com/v2/'
 
