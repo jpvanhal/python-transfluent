@@ -15,16 +15,23 @@ def make_transfluent_error(*args, **kwargs):
     return TransfluentError(*args, **kwargs)
 
 
-def make_error_response():
+def make_response(content, status_code=200):
     response = requests.Response()
-    response.status_code = 400
-    response.raw = BytesIO(
-        '{"status":"ERROR","error":{"type":"EBackendParameterInvalid","mes'
-        'sage":"Name is required!"},"response":"Unfortunately an error occ'
-        'ured. You might want to try again. If problem persists, please re'
-        'port this as a bug. We are sorry for inconvenience."}'
-    )
+    response.status_code = status_code
+    response._content = content
     return response
+
+
+def make_error_response():
+    return make_response(
+        content=(
+            '{"status":"ERROR","error":{"type":"EBackendParameterInvalid","mes'
+            'sage":"Name is required!"},"response":"Unfortunately an error occ'
+            'ured. You might want to try again. If problem persists, please re'
+            'port this as a bug. We are sorry for inconvenience."}'
+        ),
+        status_code=400
+    )
 
 
 class TestTransfluent(object):
@@ -42,9 +49,7 @@ class TestTransfluent(object):
         assert client._transfluent_url == 'https://transfluent.com/v2/'
 
     def test_request_on_successful_json_response(self):
-        response = requests.Response()
-        response.status_code = 200
-        response.raw = BytesIO('{"status":"OK","response":"Hello World"}')
+        response = make_response('{"status":"OK","response":"Hello World"}')
         (
             flexmock(requests)
             .should_receive('request')
@@ -61,9 +66,7 @@ class TestTransfluent(object):
         assert response == u'Hello World'
 
     def test_request_on_successful_non_json_response(self):
-        response = requests.Response()
-        response.status_code = 200
-        response.raw = BytesIO('some content')
+        response = make_response('some content')
         (
             flexmock(requests)
             .should_receive('request')
