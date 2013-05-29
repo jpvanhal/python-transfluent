@@ -347,6 +347,81 @@ class TestTransfluent(object):
         rv = client.file_read('my-project/messages', 11)
         assert rv is fake_rv
 
+    def test_texts_save(self):
+        client = make_transfluent()
+        fake_rv = flexmock()
+        (
+            flexmock(client)
+            .should_receive('_authed_request')
+            .with_args(
+                'POST',
+                'texts',
+                {
+                    'group_id': 'my-project/messages',
+                    'language': 11,
+                    'texts[foo]': 'bar',
+                    'invalidate_translations': 1
+                }
+            )
+            .and_return(fake_rv)
+            .once()
+        )
+        rv = client.texts_save('my-project/messages', 11, {'foo': 'bar'})
+        assert rv is fake_rv
+
+    def test_texts_read(self):
+        client = make_transfluent()
+        fake_rv = flexmock()
+        (
+            flexmock(client)
+            .should_receive('_authed_request')
+            .with_args(
+                'GET',
+                'texts',
+                {
+                    'group_id': 'my-project/messages',
+                    'language': 11,
+                    'limit': 100,
+                    'offset': 0
+                }
+            )
+            .and_return(fake_rv)
+            .once()
+        )
+        rv = client.texts_read('my-project/messages', 11)
+        assert rv is fake_rv
+
+    def test_texts_translate(self):
+        client = make_transfluent()
+        fake_rv = flexmock()
+        (
+            flexmock(client)
+            .should_receive('_authed_request')
+            .with_args(
+                'GET',
+                'texts/translate',
+                {
+                    'group_id': 'my-project/messages',
+                    'source_language': 11,
+                    'target_languages': [1, 14],
+                    'texts[][id]': ['foo', 'bar'],
+                    'comment': '',
+                    'callback_url': '',
+                    'max_words': 1000,
+                    'level': 3
+                }
+            )
+            .and_return(fake_rv)
+            .once()
+        )
+        rv = client.texts_translate(
+            group_id='my-project/messages',
+            language=11,
+            target_languages=[1, 14],
+            texts=['foo', 'bar']
+        )
+        assert rv is fake_rv
+
 
 class TestTransfluentError(object):
     def test_constructor_sets_response(self):
