@@ -406,7 +406,7 @@ class TestTransfluent(object):
                 {
                     'group_id': 'my-project/messages',
                     'source_language': 11,
-                    'target_languages': [1, 14],
+                    'target_languages[]': [1, 14],
                     'texts[][id]': ['foo', 'bar'],
                     'comment': '',
                     'callback_url': '',

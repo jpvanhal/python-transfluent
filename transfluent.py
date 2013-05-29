@@ -10,7 +10,7 @@ import base64
 
 import requests
 
-__version__ = '0.2.0'
+__version__ = '0.2.1'
 
 TRANSFLUENT_URL = 'https://transfluent.com/v2/'
 
@@ -216,7 +216,7 @@ class Transfluent(object):
         data = {
             'group_id': group_id,
             'source_language': language,
-            'target_languages': target_languages,
+            'target_languages[]': target_languages,
             'texts[][id]': texts,
             'level': kwargs.get('level', 3),
             'comment': kwargs.get('comment', ''),
