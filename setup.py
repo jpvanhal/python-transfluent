@@ -29,7 +29,7 @@ setup(
     license=open('LICENSE').read(),
     platforms='any',
     install_requires=[
-        'requests',
+        'requests>=1.0',
     ],
     classifiers=[
         'Development Status :: 3 - Alpha',
