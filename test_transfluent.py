@@ -1,4 +1,4 @@
-from io import BytesIO, StringIO
+from io import BytesIO
 
 from flexmock import flexmock
 import pytest
@@ -19,17 +19,19 @@ def make_response(content, status_code=200):
     response = requests.Response()
     response.status_code = status_code
     response._content = content
+    response.encoding = 'utf-8'
     return response
 
 
 def make_error_response():
+    content = (
+        b'{"status":"ERROR","error":{"type":"EBackendParameterInvalid","mes'
+        b'sage":"Name is required!"},"response":"Unfortunately an error occ'
+        b'ured. You might want to try again. If problem persists, please re'
+        b'port this as a bug. We are sorry for inconvenience."}'
+    )
     return make_response(
-        content=(
-            '{"status":"ERROR","error":{"type":"EBackendParameterInvalid","mes'
-            'sage":"Name is required!"},"response":"Unfortunately an error occ'
-            'ured. You might want to try again. If problem persists, please re'
-            'port this as a bug. We are sorry for inconvenience."}'
-        ),
+        content=content,
         status_code=400
     )
 
@@ -49,7 +51,7 @@ class TestTransfluent(object):
         assert client._transfluent_url == 'https://transfluent.com/v2/'
 
     def test_request_on_successful_json_response(self):
-        response = make_response('{"status":"OK","response":"Hello World"}')
+        response = make_response(b'{"status":"OK","response":"Hello World"}')
         (
             flexmock(requests)
             .should_receive('request')
@@ -66,7 +68,7 @@ class TestTransfluent(object):
         assert response == u'Hello World'
 
     def test_request_on_successful_non_json_response(self):
-        response = make_response('some content')
+        response = make_response(b'some content')
         (
             flexmock(requests)
             .should_receive('request')
@@ -80,7 +82,7 @@ class TestTransfluent(object):
         )
         client = make_transfluent()
         response = client._request('GET', 'hello/World/')
-        assert response == u'some content'
+        assert response == b'some content'
 
     def test_request_on_error_raises_exception(self):
         from transfluent import TransfluentError
@@ -272,7 +274,7 @@ class TestTransfluent(object):
         rv = client.file_save(
             'my-project/messages',
             1,
-            StringIO(u"file contents"),
+            BytesIO(b'file contents'),
             'po-file'
         )
         assert rv is fake_rv
