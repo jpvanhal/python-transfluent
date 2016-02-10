@@ -4,6 +4,11 @@ Changelog
 Here you can see the full list of changes between each Transfluent for Python
 release.
 
+0.3.0 (February 10, 2016)
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- Added Python 3 support.
+
 0.2.1 (May 29, 2013)
 ^^^^^^^^^^^^^^^^^^^^
 
