@@ -7,12 +7,20 @@
     :license: BSD, see LICENSE for more details.
 """
 import base64
+import sys
 
 import requests
 
 __version__ = '0.2.1'
 
 TRANSFLUENT_URL = 'https://transfluent.com/v2/'
+
+
+PY2 = sys.version_info[0] == 2
+if not PY2:
+    iteritems = lambda x: iter(x.items())
+else:
+    iteritems = lambda x: x.iteritems()
 
 
 class Transfluent(object):
@@ -117,7 +125,7 @@ class Transfluent(object):
             'language': language,
             'invalidate_translations': 1 if invalidate_translations else 0,
         }
-        for key, content in texts.iteritems():
+        for key, content in iteritems(texts):
             data['texts[{0}]'.format(key)] = content
         return self._authed_request('POST', 'texts', data)
 
@@ -230,12 +238,12 @@ class Transfluent(object):
         try:
             content = file.read()
         except AttributeError:
-            content = str(file)
+            content = file.encode(format)
         data = {
             'identifier': identifier,
             'language': language,
             'format': format,
-            'content': base64.b64encode(content),
+            'content': base64.b64encode(content).decode('ascii'),
             'type': type,
             'save_only_data': int(save_only_data)
         }
